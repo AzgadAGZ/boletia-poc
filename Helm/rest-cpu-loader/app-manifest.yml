@@ -15,6 +15,13 @@ spec:
       containers:
         - name: rest-cpu-loader
           image: ecrboletia.com/rest-cpu-loader:1.0.0  
+          resources:
+            limits:
+              cpu: "3"
+              memory: "15Gi"
+            requests:
+              cpu: "3"
+              memory: "15Gi"
           ports:
             - containerPort: 8080           
           livenessProbe:
