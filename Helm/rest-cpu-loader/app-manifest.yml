@@ -20,8 +20,8 @@ spec:
               cpu: "3"
               memory: "15Gi"
             requests:
-              cpu: "3"
-              memory: "15Gi"
+              cpu: "1"
+              memory: "1Gi"
           ports:
             - containerPort: 8080           
           livenessProbe:
@@ -82,3 +82,25 @@ spec:
                 name: rest-cpu-loader-nodeport-service
                 port:
                   number: 8080
+---
+apiVersion: "autoscaling.k8s.io/v1beta2"
+kind: VerticalPodAutoscaler
+metadata:
+  name: cpu-rest-loader
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: cpu-rest-loader
+  resourcePolicy:
+    containerPolicies:
+      - containerName: '*'
+        controlledResources: ["cpu", "memory"]
+        minAllowed:
+          cpu: 1Gi
+          memory: 1Gi
+        maxAllowed:
+          cpu: 6Gi
+          memory: 14Gi
+  updatePolicy:
+    updateMode: "Auto"
